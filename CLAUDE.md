@@ -121,8 +121,9 @@ emulator-data/     # dışa aktarılmış emülatör verisi (commit'lenir)
 - `dart:io` kullanma; kod web'de de derlenmelidir. Seçilen görseli `XFile.readAsBytes()` ile oku.
 - Sağlık belgesi görselleri: `image_picker` ile `maxWidth: 1280`, `imageQuality: 70`; base64 metni 900 KB'ı geçerse yüklemeyi reddet ve kullanıcıdan daha küçük bir fotoğraf iste. Görsel `healthDocuments/{recordId}` belgesine yazılır, `healthRecords` belgesine asla.
 - Hayvanlar silinmez: `active: false`. Pasif yaparken bekleyen eşleşme isteklerini aynı batch'te iptal et.
-- Belge ID kuralları: yorum = yazarın uid'si; eşleşme isteği = `{fromPetId}_{toPetId}`; devir isteği = `petId`.
-- Telefon numarası sadece `users/{uid}/private/contact` belgesinde tutulur.
+- Belge ID kuralları: yorum = yazarın uid'si; eşleşme isteği = `{fromPetId}_{toPetId}`; devir isteği = `petId`; iletişim paylaşımı = iki uid alfabetik sırayla `{uidA}_{uidB}`; istek istatistiği = yönlü `{fromUid}_{toUid}` (sıralanmaz); spam işareti = `users/{alıcıUid}/spamSenders/{gönderenUid}`.
+- Telefon numarası sadece `users/{uid}/private/contact` belgesinde tutulur. Karşı tarafın okuma izni `contactShares` belgesine bağlıdır; bu belge istek kabulüyle aynı batch'te oluşturulur, engellemede silinir.
+- Engel listesi `users/{uid}/private/blocks` belgesindedir ve sadece sahibine görünür.
 - "Süresi doldu" durumu veritabanına yazılmaz; `validUntil` ile hesaplanır.
 - Emülatör bağlantısı: Android'de `10.0.2.2`, web'de `localhost`.
 

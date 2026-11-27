@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "666197287819",
+    "project_id": "vetmatch-a160e",
+    "storage_bucket": "vetmatch-a160e.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:666197287819:android:50341b4911258ff340058e",
+        "android_client_info": {
+          "package_name": "com.vetmatch.vetmatch"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDHnffEBN305rBdp6lbGadrKoro8EohB1g"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

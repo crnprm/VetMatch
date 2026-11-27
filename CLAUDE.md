@@ -74,6 +74,13 @@ Yukarıdaki genel kurallar her zaman geçerli. Aşağıdakiler bu projeye özel.
 
 Mobil Programlama dersi için iki kişilik ekibin Android uygulaması: yakındaki veteriner kliniklerini bulma + veteriner onaylı sağlık testlerine dayalı eşleştirme. Tüm veri kurgusal. Kararlar ve gerekçeler: `README.md` (proje raporu), `PLAN.md` (iş planı ve güncel veri modeli), `docs/adr/`. Bir karar bu dosyalarla çelişiyorsa uygulamadan önce sor.
 
+## Geliştirme ortamları
+
+Ekip iki işletim sisteminde çalışıyor: Toprak Linux'ta, Ceren Windows'ta. Yeni bir bilgisayarda kurulum ve Windows notları: `docs/KURULUM.md`. Faz 0 tamamlandı; `flutter create`, `flutterfire configure` veya `firebase init` yeniden çalıştırılmaz.
+
+- Belgelere yazılan komutlar her iki sistemde çalışmalı. Kabuğa özgü sözdizimi (fish, bash, PowerShell) kullanma.
+- `package.json` script'lerinde ve Node kodunda platforma bağımlı komut kullanma: `VAR=değer komut`, `rm -rf`, `cp`, `export` yok. Ortam değişkenlerini ve dosya işlemlerini Node kodunun içinde yap; yolları `path.join` ile kur.
+
 ## Teknoloji
 
 - Flutter (stable), Dart 3. Hedef platformlar: Android (asıl), web (sadece geliştirme kolaylığı). iOS, Linux, Windows, macOS yapılandırması ekleme.
@@ -121,8 +128,9 @@ emulator-data/     # dışa aktarılmış emülatör verisi (commit'lenir)
 - `dart:io` kullanma; kod web'de de derlenmelidir. Seçilen görseli `XFile.readAsBytes()` ile oku.
 - Sağlık belgesi görselleri: `image_picker` ile `maxWidth: 1280`, `imageQuality: 70`; base64 metni 900 KB'ı geçerse yüklemeyi reddet ve kullanıcıdan daha küçük bir fotoğraf iste. Görsel `healthDocuments/{recordId}` belgesine yazılır, `healthRecords` belgesine asla.
 - Hayvanlar silinmez: `active: false`. Pasif yaparken bekleyen eşleşme isteklerini aynı batch'te iptal et.
-- Belge ID kuralları: yorum = yazarın uid'si; eşleşme isteği = `{fromPetId}_{toPetId}`; devir isteği = `petId`.
-- Telefon numarası sadece `users/{uid}/private/contact` belgesinde tutulur.
+- Belge ID kuralları: yorum = yazarın uid'si; eşleşme isteği = `{fromPetId}_{toPetId}`; devir isteği = `petId`; iletişim paylaşımı = iki uid alfabetik sırayla `{uidA}_{uidB}`; istek istatistiği = yönlü `{fromUid}_{toUid}` (sıralanmaz); spam işareti = `users/{alıcıUid}/spamSenders/{gönderenUid}`.
+- Telefon numarası sadece `users/{uid}/private/contact` belgesinde tutulur. Karşı tarafın okuma izni `contactShares` belgesine bağlıdır; bu belge istek kabulüyle aynı batch'te oluşturulur, engellemede silinir.
+- Engel listesi `users/{uid}/private/blocks` belgesindedir ve sadece sahibine görünür.
 - "Süresi doldu" durumu veritabanına yazılmaz; `validUntil` ile hesaplanır.
 - Emülatör bağlantısı: Android'de `10.0.2.2`, web'de `localhost`.
 
@@ -141,5 +149,5 @@ emulator-data/     # dışa aktarılmış emülatör verisi (commit'lenir)
 ## Dil ve stil
 
 - Kod, tanımlayıcılar ve kod yorumları İngilizce; kullanıcıya görünen metinler Türkçe.
-- Commit mesajları Türkçe, kısa ve emir kipinde ("Klinik detay ekranını ekle").
+- Commit mesajları Türkçe, kısa ve geçmiş zaman kipinde ("Klinik detay ekranı eklendi").
 - `main` dalına doğrudan commit atma; `feature/<kısa-ad>` dalında çalış.

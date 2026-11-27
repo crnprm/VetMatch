@@ -1,0 +1,17 @@
+# Store text files with LF in the repo and check them out with LF on every OS,
+# so Windows and Linux checkouts produce identical diffs.
+* text=auto eol=lf
+
+# Windows scripts need CRLF.
+*.bat text eol=crlf
+*.cmd text eol=crlf
+*.ps1 text eol=crlf
+
+# Binary files: never touch line endings.
+*.png binary
+*.jpg binary
+*.jpeg binary
+*.ico binary
+*.otf binary
+*.ttf binary
+*.jar binary

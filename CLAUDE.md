@@ -94,6 +94,7 @@ Ekip iki işletim sisteminde çalışıyor: Toprak Linux'ta, Ceren Windows'ta. Y
 ```bash
 firebase emulators:start --import ./emulator-data      # emülatörler (Auth 9099, Firestore 8080, UI 4000)
 flutter run --dart-define=USE_EMULATOR=true            # Android emülatöründe
+flutter run --dart-define=USE_FAKE=true                # sahte veriyle; Firebase'e bağlanmaz, emülatör gerekmez
 flutter run -d web-server --web-port 3000 --dart-define=USE_EMULATOR=true   # web; 8080 Firestore emülatörüne ait
 flutter analyze
 flutter test

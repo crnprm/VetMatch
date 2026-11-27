@@ -46,6 +46,26 @@ flutter run -d web-server --web-port 3000 --dart-define=USE_EMULATOR=true
 
 Sonra tarayıcıda `localhost:3000` adresini aç. Emulator UI: `localhost:4000`.
 
+## Sahte veriyle çalıştırma
+
+Ekran geliştirirken emülatör gerekmez:
+
+```sh
+flutter run --dart-define=USE_FAKE=true
+```
+
+Uygulama bellekte tutulan kurgusal veriyle açılır, Firebase'e bağlanmaz; uygulama kapanınca yapılan değişiklikler silinir. Hesapların hepsinin şifresi `test1234`:
+
+| E-posta | Kim | Senaryodaki yeri |
+|---|---|---|
+| `sahip1@vetmatch.test` | Ayşe (sahip) | Sfenks Pamuk, uygun; gelen bir eşleşme isteği var; spam kutusunda bir kişi var |
+| `sahip2@vetmatch.test` | Mehmet (sahip) | Sfenks Duman, uygun; Pamuk'a istek göndermiş |
+| `sahip3@vetmatch.test` | Zeynep (sahip) | Golden Retriever Altın; göz muayenesi onay bekliyor |
+| `vet1@vetmatch.test` | Dr. Ece Kaya (veteriner) | Kayısı Veteriner Kliniği |
+| `vet2@vetmatch.test` | Dr. Can Demir (veteriner) | Fırat Hayvan Hastanesi; bekleyen bir belgesi var |
+
+Veri `lib/data/fake/fake_seed.dart` dosyasında.
+
 ## Windows notları
 
 - Emülatörler ilk açılışta Windows Güvenlik Duvarı izni isteyebilir (Java ve Node için). "Özel ağlar" için izin vermek yeterli; emülatörler sadece bu bilgisayardan (`127.0.0.1`) erişilir.

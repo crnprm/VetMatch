@@ -4,10 +4,16 @@ import 'package:material_ui/material_ui.dart';
 
 import 'app.dart';
 import 'core/emulator.dart';
+import 'core/fake_mode.dart';
 import 'firebase_options.dart';
+import 'providers/fake_overrides.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  if (useFake) {
+    runApp(ProviderScope(overrides: fakeOverrides(), child: const VetMatchApp()));
+    return;
+  }
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
   if (useEmulator) {
     await connectToEmulators();

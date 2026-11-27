@@ -74,6 +74,13 @@ Yukarıdaki genel kurallar her zaman geçerli. Aşağıdakiler bu projeye özel.
 
 Mobil Programlama dersi için iki kişilik ekibin Android uygulaması: yakındaki veteriner kliniklerini bulma + veteriner onaylı sağlık testlerine dayalı eşleştirme. Tüm veri kurgusal. Kararlar ve gerekçeler: `README.md` (proje raporu), `PLAN.md` (iş planı ve güncel veri modeli), `docs/adr/`. Bir karar bu dosyalarla çelişiyorsa uygulamadan önce sor.
 
+## Geliştirme ortamları
+
+Ekip iki işletim sisteminde çalışıyor: Toprak Linux'ta, Ceren Windows'ta. Yeni bir bilgisayarda kurulum ve Windows notları: `docs/KURULUM.md`. Faz 0 tamamlandı; `flutter create`, `flutterfire configure` veya `firebase init` yeniden çalıştırılmaz.
+
+- Belgelere yazılan komutlar her iki sistemde çalışmalı. Kabuğa özgü sözdizimi (fish, bash, PowerShell) kullanma.
+- `package.json` script'lerinde ve Node kodunda platforma bağımlı komut kullanma: `VAR=değer komut`, `rm -rf`, `cp`, `export` yok. Ortam değişkenlerini ve dosya işlemlerini Node kodunun içinde yap; yolları `path.join` ile kur.
+
 ## Teknoloji
 
 - Flutter (stable), Dart 3. Hedef platformlar: Android (asıl), web (sadece geliştirme kolaylığı). iOS, Linux, Windows, macOS yapılandırması ekleme.
@@ -142,5 +149,5 @@ emulator-data/     # dışa aktarılmış emülatör verisi (commit'lenir)
 ## Dil ve stil
 
 - Kod, tanımlayıcılar ve kod yorumları İngilizce; kullanıcıya görünen metinler Türkçe.
-- Commit mesajları Türkçe, kısa ve emir kipinde ("Klinik detay ekranını ekle").
+- Commit mesajları Türkçe, kısa ve geçmiş zaman kipinde ("Klinik detay ekranı eklendi").
 - `main` dalına doğrudan commit atma; `feature/<kısa-ad>` dalında çalış.

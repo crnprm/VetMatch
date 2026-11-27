@@ -57,16 +57,18 @@ Uygunluk (telefonda hesaplanır): hayvan `active`, `neutered == false`, yaşı �
 
 Her fazın "bitti sayılır" maddeleri doğrulanabilir olmalı. Biri tutmuyorsa faz bitmemiştir.
 
-### Faz 0 — Proje iskeleti (Toprak)
+### Faz 0 — Proje iskeleti (Toprak) ✅ Tamamlandı (27 Kasım 2026)
+
+> Bu faz bitti; adımlar kayıt için duruyor. Yeni bilgisayarda kurulum için `docs/KURULUM.md`.
 
 1. Firebase konsolunda Spark planında proje aç. Authentication'da e-posta/şifre girişini etkinleştir, Firestore'u oluştur. Storage'ı açma.
 2. Repo kökünde Flutter projesi:
-   ```fish
+   ```sh
    flutter create --org com.vetmatch --platforms android,web --project-name vetmatch .
    ```
 3. `flutter create`'in ürettiği `.gitignore`'a gizli anahtar kalıplarını ekle (`*-firebase-adminsdk-*.json`, `serviceAccount*.json`, `.env*`). Firebase araçları çalışmadan önce yapılmalı.
 4. Paketler:
-   ```fish
+   ```sh
    flutter pub add flutter_riverpod go_router firebase_core firebase_auth cloud_firestore flutter_map latlong2 geolocator image_picker url_launcher intl
    ```
 5. `flutterfire configure`: Android ve web'i seç.
@@ -75,7 +77,7 @@ Her fazın "bitti sayılır" maddeleri doğrulanabilir olmalı. Biri tutmuyorsa 
 8. Android debug derlemesi için `10.0.2.2` adresine açık metin (cleartext) trafiğine izin veren network security config ekle. Bu olmadan Auth emülatörü Android'de bağlanamaz.
 9. Klasör yapısını oluştur (bkz. `CLAUDE.md`).
 
-**Bitti sayılır:** `flutter analyze` temiz; boş uygulama hem Android emülatöründe hem `flutter run -d web-server --web-port 3000` ile Zen'de açılıyor; Emulator UI'da (`localhost:4000`) uygulamadan oluşturulan bir test kullanıcısı görünüyor.
+**Bitti sayılır:** `flutter analyze` temiz; boş uygulama hem Android emülatöründe hem `flutter run -d web-server --web-port 3000` ile tarayıcıda açılıyor; Emulator UI'da (`localhost:4000`) uygulamadan oluşturulan bir test kullanıcısı görünüyor.
 
 ### Faz 1 — Veri katmanı (Toprak) → Ceren'e devir noktası
 

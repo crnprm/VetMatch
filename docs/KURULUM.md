@@ -23,6 +23,8 @@ Flutter projesi, Firebase bağlantısı ve emülatör ayarları repoda hazır. �
 
 `flutterfire` CLI gerekmez.
 
+Claude Code kullanıyorsan: projede açık olan `security-guidance` eklentisi Python 3.8+ ve `bash` ister. Windows'ta Python'u kur ve Git for Windows'la gelen Git Bash'in `PATH`'te olduğundan emin ol.
+
 ## İlk çalıştırma
 
 ```sh

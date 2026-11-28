@@ -14,6 +14,7 @@ Flutter projesi, Firebase bağlantısı ve emülatör ayarları repoda hazır. �
 
 | Araç | Not |
 |---|---|
+| Git | Windows'ta [Git for Windows](https://git-scm.com/download/win); Git Bash da onunla gelir. |
 | Flutter (stable) | Dart 3.14 veya üstü. `flutter doctor` ile kontrol et; sadece "Flutter" ve "Android toolchain" satırlarının yeşil olması yeterli. |
 | Android Studio | Android SDK, lisanslar (`flutter doctor --android-licenses`) ve en az bir Android emülatörü (AVD). |
 | Node.js | 20 veya üstü. `firebase-tools` ve ileride `firestore-tests/`, `tools/seed/` için. |
@@ -22,6 +23,8 @@ Flutter projesi, Firebase bağlantısı ve emülatör ayarları repoda hazır. �
 | Tarayıcı | Herhangi biri. Web, sadece günlük arayüz işi için. |
 
 `flutterfire` CLI gerekmez.
+
+Claude Code kullanıyorsan: projede dört eklenti tanımlı (`.claude/settings.json`). Projeyi Claude Code'da ilk açtığında bunları kurmak isteyip istemediğin sorulur; onayla. Bu eklentilerden `security-guidance` Python 3.8+ ve `bash` ister. Windows'ta Python'u kur ve Git for Windows'la gelen Git Bash'in `PATH`'te olduğundan emin ol.
 
 ## İlk çalıştırma
 
@@ -46,13 +49,34 @@ flutter run -d web-server --web-port 3000 --dart-define=USE_EMULATOR=true
 
 Sonra tarayıcıda `localhost:3000` adresini aç. Emulator UI: `localhost:4000`.
 
+## Sahte veriyle çalıştırma
+
+Ekran geliştirirken emülatör gerekmez:
+
+```sh
+flutter run --dart-define=USE_FAKE=true
+```
+
+Uygulama bellekte tutulan kurgusal veriyle açılır, Firebase'e bağlanmaz; uygulama kapanınca yapılan değişiklikler silinir. Hesapların hepsinin şifresi `test1234`:
+
+| E-posta | Kim | Senaryodaki yeri |
+|---|---|---|
+| `sahip1@vetmatch.test` | Ayşe (sahip) | Sfenks Pamuk, uygun; gelen bir eşleşme isteği var; spam kutusunda bir kişi var |
+| `sahip2@vetmatch.test` | Mehmet (sahip) | Sfenks Duman, uygun; Pamuk'a istek göndermiş |
+| `sahip3@vetmatch.test` | Zeynep (sahip) | Golden Retriever Altın; göz muayenesi onay bekliyor |
+| `vet1@vetmatch.test` | Dr. Ece Kaya (veteriner) | Kayısı Veteriner Kliniği |
+| `vet2@vetmatch.test` | Dr. Can Demir (veteriner) | Fırat Hayvan Hastanesi; bekleyen bir belgesi var |
+
+Veri `lib/data/fake/fake_seed.dart` dosyasında.
+
 ## Windows notları
 
+- Geliştirici Modu'nu aç: Ayarlar → Sistem → Geliştiriciler için → Geliştirici Modu. Flutter, eklentili projelerde symlink kullanır; bu mod kapalıysa `flutter pub get` ya da `flutter run` "Building with plugins requires symlink support" hatası verir.
 - Emülatörler ilk açılışta Windows Güvenlik Duvarı izni isteyebilir (Java ve Node için). "Özel ağlar" için izin vermek yeterli; emülatörler sadece bu bilgisayardan (`127.0.0.1`) erişilir.
 - Android emülatörü için donanım hızlandırma (Windows Hypervisor Platform) açık olmalı; Android Studio'nun SDK Manager'ı bunu kontrol eder.
 - `cd firestore-tests && npm test` gibi `&&` içeren komutlar PowerShell 7'de ve Git Bash'te çalışır, eski Windows PowerShell 5.1'de çalışmaz. 5.1 kullanıyorsan iki komutu ayrı satırlarda çalıştır.
-- Git satır sonlarını kendisi dönüştürür (`core.autocrlf`); dosyalardaki satır sonlarını elle değiştirme.
+- Satır sonlarını `.gitattributes` belirler: dosyalar Windows'ta da LF ile gelir (`.bat`, `.cmd`, `.ps1` hariç). Editörünün bunları CRLF'ye çevirmesine izin verme.
 
 ## Kontrol
 
-Kurulum tamamsa `flutter analyze` sorun bulmaz ve uygulama emülatöre bağlanır: geçici ana ekranda "Emülatöre bağlı" yazar, "Test kullanıcısı oluştur" düğmesiyle oluşturulan kullanıcı `localhost:4000/auth` adresinde görünür. (`flutter test` ilk testler Faz 1'de eklenene kadar "test dosyası yok" der; bu bir hata değildir.)
+Kurulum tamamsa `flutter analyze` sorun bulmaz, `flutter test` geçer ve uygulama emülatöre bağlanır: geçici ana ekranda "Emülatöre bağlı" yazar, "Test kullanıcısı oluştur" düğmesiyle oluşturulan kullanıcı `localhost:4000/auth` adresinde görünür.

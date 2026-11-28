@@ -1,7 +1,10 @@
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:material_ui/material_ui.dart';
 
 import 'core/emulator.dart';
+import 'core/fake_mode.dart';
 import 'core/smoke_test.dart';
+import 'providers/repository_providers.dart';
 
 class VetMatchApp extends StatelessWidget {
   const VetMatchApp({super.key});
@@ -16,15 +19,19 @@ class VetMatchApp extends StatelessWidget {
   }
 }
 
+final _fakeClinicsProvider = StreamProvider(
+  (ref) => ref.watch(clinicRepositoryProvider).watchClinics(),
+);
+
 /// Phase 0 placeholder; replaced by go_router routes in Phase 4.
-class _PlaceholderHome extends StatefulWidget {
+class _PlaceholderHome extends ConsumerStatefulWidget {
   const _PlaceholderHome();
 
   @override
-  State<_PlaceholderHome> createState() => _PlaceholderHomeState();
+  ConsumerState<_PlaceholderHome> createState() => _PlaceholderHomeState();
 }
 
-class _PlaceholderHomeState extends State<_PlaceholderHome> {
+class _PlaceholderHomeState extends ConsumerState<_PlaceholderHome> {
   String _status = '';
 
   Future<void> _createTestUser() async {
@@ -39,6 +46,7 @@ class _PlaceholderHomeState extends State<_PlaceholderHome> {
 
   @override
   Widget build(BuildContext context) {
+    if (useFake) return _fakeHome();
     return Scaffold(
       appBar: AppBar(title: const Text('VetMatch')),
       body: Center(
@@ -60,6 +68,20 @@ class _PlaceholderHomeState extends State<_PlaceholderHome> {
             ],
           ),
         ),
+      ),
+    );
+  }
+
+  Widget _fakeHome() {
+    final clinics = ref.watch(_fakeClinicsProvider);
+    return Scaffold(
+      appBar: AppBar(title: const Text('VetMatch')),
+      body: Center(
+        child: Text(switch (clinics) {
+          AsyncData(:final value) => 'Sahte veri: ${value.length} klinik yüklendi',
+          AsyncError(:final error) => 'Hata: $error',
+          _ => 'Yükleniyor...',
+        }),
       ),
     );
   }

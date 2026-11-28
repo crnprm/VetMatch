@@ -20,7 +20,7 @@ Bu dosya, proje raporundaki (README) kararların koda dökülme sırasını tan�
 
 | Yol | Alanlar | Not |
 |---|---|---|
-| `users/{uid}` | `role` (`owner`/`vet`), `name`, `clinicId?` | İstemci yalnızca `role: owner` ile oluşturabilir |
+| `users/{uid}` | `role` (`owner`/`vet`), `name`, `clinicId?`, `shareCode` | İstemci yalnızca `role: owner` ile oluşturabilir. `shareCode`: profilde gösterilen kısa kod (ör. `VM-4K7Q`); devirde alıcı bu kodla bulunur |
 | `users/{uid}/private/contact` | `phone` | Sahibi okur; başkası sadece ikisi arasında bir `contactShares` belgesi varsa okur |
 | `users/{uid}/private/blocks` | `userIds[]` | Sadece sahibi okur/yazar. Kurallar `get()` ile okuyup engellenen kişinin istek oluşturmasını reddeder |
 | `contactShares/{uidA}_{uidB}` | `userIds[]`, `matchRequestId`, `createdAt` | ID: iki uid alfabetik sırayla. İstek kabul edilirken aynı batch'te oluşturulur (kural `getAfter` ile isteğin `accepted` olduğunu doğrular); engellemede silinir. Kullanıcı çifti başına tek belge |
@@ -81,10 +81,10 @@ Her fazın "bitti sayılır" maddeleri doğrulanabilir olmalı. Biri tutmuyorsa 
 
 ### Faz 1 — Veri katmanı (Toprak) → Ceren'e devir noktası
 
-1. `lib/data/models/`: tablodaki her koleksiyon için model sınıfı, elle yazılmış `fromMap` / `toMap`.
-2. `lib/data/repositories/`: her alan için soyut repository arayüzü (`AuthRepository`, `ClinicRepository`, `ReviewRepository`, `PetRepository`, `HealthRepository`, `MatchRepository`, `TransferRepository`, `BlockRepository`).
-3. `lib/data/fake/`: her arayüz için sahte veri döndüren implementasyon (bellek içi, stream destekli).
-4. `lib/providers/`: repository provider'ları. Varsayılan Firebase implementasyonu; `ProviderScope` override ile sahte implementasyona geçilebilir.
+1. `lib/data/models/`: tablodaki her koleksiyon için model sınıfı, elle yazılmış `fromMap` / `toMap`. Modeller Firebase tiplerine bağlı değildir: tarih `DateTime`, konum `LatLng`; `Timestamp` / `GeoPoint` dönüşümü Faz 2'de `lib/data/firebase/` içinde yapılır.
+2. `lib/data/repositories/`: her alan için soyut repository arayüzü (`AuthRepository`, `UserRepository`, `ClinicRepository`, `ReviewRepository`, `PetRepository`, `HealthRepository`, `MatchRepository`, `TransferRepository`, `BlockRepository`).
+3. `lib/data/fake/`: her arayüz için sahte veri döndüren implementasyon (bellek içi, stream destekli). Durum geçişleri basit tutulur; 30 gün kuralı, spam sayımı ve uygunluk Faz 3'te `lib/domain/`'e gelir.
+4. `lib/providers/`: repository provider'ları. Varsayılan Firebase implementasyonu; `--dart-define=USE_FAKE=true` ile uygulama sahte implementasyonlarla açılır ve Firebase'e bağlanmaz.
 
 **Bitti sayılır:** model testleri (`toMap` → `fromMap` gidiş-dönüşü) geçiyor; arayüzler ve sahte implementasyonlar `main`'e birleşti. Bu noktadan sonra Ceren ekranlara başlayabilir.
 
@@ -163,6 +163,6 @@ B tarafı daha büyük; A tarafını alan kişi kabuğu ve giriş ekranlarını 
 
 ## Açık konular
 
-- [ ] Devirde alıcı nasıl bulunacak? Öneri: profilde gösterilen kısa paylaşım kodu (`users/{uid}.shareCode`). E-postayla arama, e-postaları diğer kullanıcılara açar.
+- [x] Devirde alıcı nasıl bulunacak? Karar (27 Kasım): profilde gösterilen kısa paylaşım kodu (`users/{uid}.shareCode`). E-postayla arama, e-postaları diğer kullanıcılara açacağı için seçilmedi.
 - [ ] Sfenks (HCM taraması) ve Golden Retriever (kalça/dirsek skorlaması, göz muayenesi) testlerinin geçerlilik süreleri ve yaş sınırları kaynağından doğrulanacak. Seed'e girene kadar demo değeri olarak işaretli kalır.
 - [ ] Demo Firebase emülatöründe mi, gerçek projede mi? Öneri: emülatör. İnternet ve kota riski yok, her sunumda temiz veri, servis hesabı anahtarı hiç gerekmez. Gerçek projeye geçilirse composite index'ler (`firestore.indexes.json`) eklenmeli; emülatör index eksikliğini hata olarak göstermez.
